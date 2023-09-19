@@ -1,0 +1,7 @@
+# Ignore locally customized builds of k6
+k6
+k6.exe
+
+# Don't commit your private env settings
+.idea/
+.env
