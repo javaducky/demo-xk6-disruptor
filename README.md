@@ -179,12 +179,19 @@ Open Grafana, looking at activity for the [Recommendation Service](http://localh
 Using k6, let's create some increased load for the service.
 
 ```shell
-./k6 run tests/01-recommendation-spike.js --duration 30s --vus 20
+./k6 run tests/01-recommendation-spike.js
 ```
 
 ## Scenario 2 - Cause a little chaos with ServiceDisruptor
 Using the objects from xk6-disruptor, we'll inject service disruptions to the recommendation service.
 
 ```shell
-./k6 run tests/02-recommendation-service-disruption.js --duration 30s --vus 20
+./k6 run tests/02-recommendation-service-disruption.js
+```
+
+## Scenario 3 - Cause a little chaos with PodDisruptor
+Using the objects from xk6-disruptor, we'll inject pod disruptions to pods of the recommendation service.
+
+```shell
+./k6 run tests/03-recommendation-pod-disruption.js
 ```

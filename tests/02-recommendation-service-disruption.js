@@ -2,22 +2,34 @@ import http from 'k6/http';
 import { ServiceDisruptor } from 'k6/x/disruptor';
 
 export const options = {
-    vus: 10,
-    duration: '10s',
+    scenarios: {
+        load: {
+            executor: 'constant-vus',
+            vus: 20,
+            duration: '30s',
+        },
+        inject: {
+            executor: 'shared-iterations',
+            iterations: 1,
+            vus: 1,
+            exec: 'injectFaults',
+            startTime: '0s',
+        }
+    },
     thresholds: {
         'http_reqs{expected_response:true}': ['rate>10'],
     },
 };
 
-export function setup() {
+export function injectFaults() {
     const fault = {
         averageDelay: '1500ms',
-        errorRate: 0.1,
+        errorRate: 0.8,
         errorCode: 500,
     };
 
     const disruptor = new ServiceDisruptor('otel-demo-recommendationservice', 'otel-demo');
-    disruptor.injectHTTPFaults(fault, '30s');
+    disruptor.injectHTTPFaults(fault, '1m');
 }
 
 export default function () {
