@@ -171,5 +171,20 @@ With the forwarding enabled, the following links should now be accessible:
 kubectl port-forward -n otel-demo svc/otel-demo-otelcol 4318:4318
 ```
 
-## Cause a little chaos
-TODO
+## Scenario 0 - Viewing base activity
+By default, Locust is running generating some activity against our site. 
+Open Grafana, looking at activity for the [Recommendation Service](http://localhost:8080/grafana/d/W2gX2zHVk/demo-dashboard?orgId=1&var-service=recommendationservice&refresh=5s&from=now-5m&to=now).
+
+## Scenario 1 - Create increased load in activity
+Using k6, let's create some increased load for the service.
+
+```shell
+./k6 run tests/01-recommendation-spike.js --duration 30s --vus 20
+```
+
+## Scenario 2 - Cause a little chaos with ServiceDisruptor
+Using the objects from xk6-disruptor, we'll inject service disruptions to the recommendation service.
+
+```shell
+./k6 run tests/02-recommendation-service-disruption.js --duration 30s --vus 20
+```
